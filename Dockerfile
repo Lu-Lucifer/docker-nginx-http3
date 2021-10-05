@@ -7,12 +7,13 @@ FROM alpine:edge AS builder
 
 LABEL maintainer="Ranadeep Polavarapu <RanadeepPolavarapu@users.noreply.github.com>"
 
-ENV NGINX_VERSION 1.19.3
-ENV NGX_BROTLI_COMMIT 25f86f0bac1101b6512135eac5f93c49c63609e3
+ENV NGINX_VERSION 1.16.1
+ENV NGX_BROTLI_COMMIT 9aec15e2aa6feea2113119ba06460af70ab3ea62
 ENV PCRE_VERSION 8.44
 ENV ZLIB_VERSION 1.2.11
+ENV QUICHE_COMMIT c885a71fd58c0c610e9e209f210b1951db81d6c5
 
-RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
+RUN set -x; GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && CONFIG="\
   --prefix=/etc/nginx \
   --sbin-path=/usr/sbin/nginx \
@@ -84,7 +85,6 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   pcre-dev \
   zlib-dev \
   linux-headers \
-  curl \
   gnupg \
   libxslt-dev \
   gd-dev \
@@ -109,13 +109,26 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && git checkout -b $NGX_BROTLI_COMMIT \
   && cd .. \
   && wget -qO- https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz | tar zxvf - \
+  && cd pcre-${PCRE_VERSION} \
+  && ./configure \
+  && make \
+  && make install \
+  && cd .. \
   && wget -qO- http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz | tar zxvf - \
+  && cd zlib-${ZLIB_VERSION} \
+  && ./configure \
+  && make \
+  && make install \
+  && cd .. \
   && git clone --depth=1 --recursive https://github.com/openresty/headers-more-nginx-module \
   && git clone --depth=1 --recursive https://github.com/nginx/njs \
   && git clone --depth=1 --recursive https://github.com/AirisX/nginx_cookie_flag_module \
   && git clone --depth=1 --recursive https://github.com/cloudflare/quiche \
-  && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
-  && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
+  && cd quiche \
+  && git checkout -b $QUICHE_COMMIT \
+  && cd .. \
+  && wget -qO nginx.tar.gz https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
+  && wget -qO nginx.tar.gz.asc https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc \
   && export GNUPGHOME="$(mktemp -d)" \
   && found=''; \
   for server in \

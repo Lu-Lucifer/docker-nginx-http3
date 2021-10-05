@@ -1,25 +1,37 @@
 # docker-nginx-http3
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/ranadeeppolavarapu/nginx-http3?color=brightgreen)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3)
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ranadeeppolavarapu/nginx-http3)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3)
-[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/ranadeeppolavarapu/nginx-http3?color=brightgreen)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3)
-[![MicroBadger](https://images.microbadger.com/badges/image/ranadeeppolavarapu/nginx-http3.svg)](https://microbadger.com/images/ranadeeppolavarapu/nginx-http3)
 ![GitHub](https://img.shields.io/github/license/RanadeepPolavarapu/docker-nginx-http3)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)  
+[![Arch](https://img.shields.io/badge/docker%20arch-linux%2Famd64-blue)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3/tags)  
+[![Arch](https://img.shields.io/badge/docker%20arch-linux%2Farm64-blue)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3/tags)  
+[![Arch](https://img.shields.io/badge/docker%20arch-linux%2Farm%2Fv7-blue)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3/tags)  
+[![Arch](https://img.shields.io/badge/docker%20arch-linux%2Farm%2Fv6-blue)](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3/tags)
 
-Alpine Linux image with nginx `1.19.2` (mainline) with HTTP/3 (QUIC), TLSv1.3, 0-RTT, brotli, NJS, Cookie-Flag support. All built on the bleeding edge. Built on the edge, for the edge.
+Alpine Linux image with nginx `1.16.1` with HTTP/3 (QUIC), TLSv1.3, 0-RTT,
+brotli, NJS, Cookie-Flag support. All built on the bleeding edge. Built on the
+edge, for the edge.
 
-HTTP/3 support provided from the smart people at [CloudFlare](https://cloudflare.com) with the [cloudflare/quiche](https://github.com/cloudflare/quiche) project.
+HTTP/3 support provided from the smart people at
+[CloudFlare](https://cloudflare.com) with the
+[cloudflare/quiche](https://github.com/cloudflare/quiche) project.
 
-Images for this are available on [Docker Hub](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3).
-
-**Latest**: `docker pull ranadeeppolavarapu/nginx-http3`
+Images for this are available on
+[Docker Hub](https://hub.docker.com/r/ranadeeppolavarapu/nginx-http3) and
+[GHCR](https://github.com/RanadeepPolavarapu/docker-nginx-http3/pkgs/container/nginx-http3).
 
 ## Usage
 
-This is a base image like the default _nginx_ image. It is meant to be used as a drop-in replacement for the nginx base image.
+**Docker Hub:** `docker pull ranadeeppolavarapu/nginx-http3`
 
-Best practice example Nginx configs are available in this repo. See [_nginx.conf_](nginx.conf) and [_h3.nginx.conf_](h3.nginx.conf).
+**GitHub Container Registry (GHCR):**
+`docker pull ghcr.io/ranadeeppolavarapu/nginx-http3`
+
+This is a base image like the default _nginx_ image. It is meant to be used as a
+drop-in replacement for the nginx base image.
+
+Best practice example Nginx configs are available in this repo. See
+[_nginx.conf_](nginx.conf) and [_h3.nginx.conf_](h3.nginx.conf).
 
 Example:
 
@@ -36,9 +48,13 @@ COPY nginx.conf /etc/nginx/
 COPY h3.nginx.conf /etc/nginx/conf.d/
 ```
 
-H3 runs over UDP so, you will need to port map both TCP and UDP. Ex: `docker run -p 80:80 -p 443:443/tcp -p 443:443/udp ...`
+H3 runs over UDP so, you will need to port map both TCP and UDP. Ex:
+`docker run -p 80:80 -p 443:443/tcp -p 443:443/udp ...`
 
-**NOTE**: Please note that you need a valid [CA](https://en.wikipedia.org/wiki/Certificate_authority) signed certificate for the client to upgrade you to HTTP/3. [Let's Encrypt](https://letsencrypt.org/) is a option for getting a free valid CA signed certificate.
+**NOTE**: Please note that you need a valid
+[CA](https://en.wikipedia.org/wiki/Certificate_authority) signed certificate for
+the client to upgrade you to HTTP/3. [Let's Encrypt](https://letsencrypt.org/)
+is a option for getting a free valid CA signed certificate.
 
 ## Contributing
 
@@ -55,7 +71,9 @@ Contributions are welcome. Please feel free to contribute 😊.
 - [headers-more-nginx-module](https://github.com/openresty/headers-more-nginx-module)
 - [NJS](https://www.nginx.com/blog/introduction-nginscript/)
 - [nginx_cookie_flag_module](https://www.nginx.com/products/nginx/modules/cookie-flag/)
-- PCRE latest with [JIT compilation](http://nginx.org/en/docs/ngx_core_module.html#pcre_jit)  enabled
+- PCRE latest with
+  [JIT compilation](http://nginx.org/en/docs/ngx_core_module.html#pcre_jit)
+  enabled
 - zlib latest
 - Alpine Linux (total size of **10 MB** compressed)
 
@@ -70,7 +88,7 @@ Possible additions in the future pending IETF spec approvals.
 Using Chrome Canary with the following CLI flags:
 
 ```bash
---flag-switches-begin --enable-quic --quic-version=h3-28 --enable-features=EnableTLS13EarlyData --flag-switches-end
+--flag-switches-begin --enable-quic --quic-version=h3-29 --enable-features=EnableTLS13EarlyData --flag-switches-end
 ```
 
 Run on Mac OS (**darwin**):
@@ -79,7 +97,7 @@ Run on Mac OS (**darwin**):
 "/Applications/Google Chrome Canary.app Contents/MacOS/Google Chrome Canary" \
   --flag-switches-begin \
   --enable-quic \
-  --quic-version=h3-23 \
+  --quic-version=h3-29 \
   --enable-features=EnableTLS13EarlyData \
   --flag-switches-end
 ```
@@ -90,7 +108,8 @@ Windows:
 
 ### HTTP/3 (QUIC) Proof
 
-Since HTTP/3 is experimental, we have to be sensible with it. Therefore, below is HTTP/3 in production on one of my web apps 🙃.
+Since HTTP/3 is experimental, we have to be sensible with it. Therefore, below
+is HTTP/3 in production on one of my web apps 🙃.
 
 ![h3](https://user-images.githubusercontent.com/7084995/67162952-831d5800-f337-11e9-9297-05241a693cc4.png)
 
